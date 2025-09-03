@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: parrainage_frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - parrainage_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: parrainage_backend
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_NAME=parrainage_db
+      - DB_USER=parrainage_user
+      - DB_PASSWORD=parrainage_pass
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - parrainage_network
+
+  database:
+    image: mysql:8.0
+    container_name: parrainage_db
+    environment:
+      MYSQL_DATABASE: parrainage_db
+      MYSQL_USER: parrainage_user
+      MYSQL_PASSWORD: parrainage_pass
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - parrainage_network
+
+volumes:
+  mysql_data:
+
+networks:
+  parrainage_network:
+    driver: bridge
