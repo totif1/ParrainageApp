@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { InscriptionRequest } from '../../models/inscription.model';
 
 @Component({
   selector: 'app-registration',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="container mt-4">
       <div class="row justify-content-center">
@@ -158,9 +161,6 @@ import { InscriptionRequest } from '../../models/inscription.model';
       </div>
     </div>
   `,
-  imports: [
-    ReactiveFormsModule
-  ],
   styles: [`
     .card {
       border: none;

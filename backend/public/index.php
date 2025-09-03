@@ -1,7 +1,7 @@
 <?php
 
 // Chargement de l'autoloader Composer
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use App\Controllers\InscriptionController;
 use App\Controllers\AuthController;

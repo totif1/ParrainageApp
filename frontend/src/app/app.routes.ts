@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { AdminComponent } from './components/admin/admin.component';
@@ -10,11 +9,5 @@ export const routes: Routes = [
   { path: 'inscription', component: RegistrationComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'admin/dashboard', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '' } // Redirection pour les routes inconnues
+  { path: '**', redirectTo: '' }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

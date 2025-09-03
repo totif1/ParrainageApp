@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { Inscription, LoginRequest } from '../../models/inscription.model';
 
+// Déclaration pour Bootstrap
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-admin',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
     <div class="container mt-4">
 
@@ -305,9 +311,6 @@ import { Inscription, LoginRequest } from '../../models/inscription.model';
       </div>
     </div>
   `,
-  imports: [
-    ReactiveFormsModule
-  ],
   styles: [`
     .card {
       border: none;
@@ -456,11 +459,11 @@ export class AdminComponent implements OnInit {
 
   showDetails(inscription: Inscription): void {
     this.selectedInscription = inscription;
-    // Utiliser Bootstrap modal via window
+    // Utiliser Bootstrap modal
     setTimeout(() => {
       const modalElement = document.getElementById('detailsModal');
-      if (modalElement && (window as any).bootstrap) {
-        const modal = new (window as any).bootstrap.Modal(modalElement);
+      if (modalElement && bootstrap) {
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
       }
     }, 0);

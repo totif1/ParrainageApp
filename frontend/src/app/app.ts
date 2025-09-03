@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
-import {Router, NavigationEnd, RouterLinkActive, RouterLink, RouterOutlet} from '@angular/router';
+import { Router, NavigationEnd, RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ApiService } from './services/api.service';
 import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLinkActive,
+    RouterLink,
+    RouterOutlet
+  ],
   template: `
     <div class="min-vh-100 bg-light">
       <!-- Navigation -->
@@ -109,7 +117,7 @@ import { filter } from 'rxjs/operators';
             <div class="col-md-3">
               <h6 class="fw-bold">Contact</h6>
               <p class="small mb-0">
-                <i class="bi bi-envelope"></i> parrainage iut.fr<br>
+                <i class="bi bi-envelope"></i> parrainage@iut.fr<br>
                 <i class="bi bi-telephone"></i> 01 23 45 67 89
               </p>
             </div>
@@ -125,11 +133,6 @@ import { filter } from 'rxjs/operators';
       </footer>
     </div>
   `,
-  imports: [
-    RouterLinkActive,
-    RouterLink,
-    RouterOutlet
-  ],
   styles: [`
     .navbar-brand {
       font-size: 1.25rem;
