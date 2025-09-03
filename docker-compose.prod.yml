@@ -1,0 +1,125 @@
+# Configuration Docker Compose pour la production
+# Usage: docker-compose -f docker-compose.prod.yml up -d
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: parrainage_frontend_prod
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - parrainage_network
+    environment:
+      - NODE_ENV=production
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: parrainage_backend_prod
+    ports:
+      - "${BACKEND_PORT:-8080}:80"
+    depends_on:
+      - database
+    restart: unless-stopped
+    environment:
+      - DB_HOST=${DB_HOST:-database}
+      - DB_NAME=${DB_NAME:-parrainage_db}
+      - DB_USER=${DB_USER:-parrainage_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION:-86400}
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+    volumes:
+      - ./backend/logs:/var/www/html/logs
+    networks:
+      - parrainage_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  database:
+    image: mysql:8.0
+    container_name: parrainage_db_prod
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-parrainage_db}
+      MYSQL_USER: ${DB_USER:-parrainage_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysql_prod_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/backup:/backup
+    restart: unless-stopped
+    networks:
+      - parrainage_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USER:-parrainage_user}", "-p${DB_PASSWORD}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --innodb-buffer-pool-size=256M
+      --innodb-log-file-size=64M
+      --max_connections=200
+      --query_cache_type=1
+      --query_cache_size=32M
+
+  # Service de sauvegarde automatique
+  backup:
+    image: mysql:8.0
+    container_name: parrainage_backup
+    depends_on:
+      - database
+    volumes:
+      - ./database/backup:/backup
+    environment:
+      - DB_HOST=${DB_HOST:-database}
+      - DB_NAME=${DB_NAME:-parrainage_db}
+      - DB_USER=${DB_USER:-parrainage_user}
+      - DB_PASSWORD=${DB_PASSWORD}
+    networks:
+      - parrainage_network
+    command: >
+      sh -c "
+        while true; do
+          sleep 86400
+          mysqldump -h database -u ${DB_USER:-parrainage_user} -p${DB_PASSWORD} ${DB_NAME:-parrainage_db} > /backup/backup_$(date +%Y%m%d_%H%M%S).sql
+          find /backup -name 'backup_*.sql' -mtime +7 -delete
+        done
+      "
+    restart: unless-stopped
+
+  # Service de monitoring (optionnel)
+  watchtower:
+    image: containrrr/watchtower
+    container_name: parrainage_watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300
+      - WATCHTOWER_INCLUDE_STOPPED=true
+    restart: unless-stopped
+    command: parrainage_frontend_prod parrainage_backend_prod
+
+volumes:
+  mysql_prod_data:
+    driver: local
+
+networks:
+  parrainage_network:
+    driver: bridge
