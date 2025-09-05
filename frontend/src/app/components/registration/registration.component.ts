@@ -79,6 +79,34 @@ import { InscriptionRequest } from '../../models/inscription.model';
                   </div>
                 </div>
 
+                <!-- discord -->
+                <div class="mb-3">
+                  <label for="discord" class="form-label fw-bold">
+                    <i class="bi bi-envelope"></i> discord
+                  </label>
+                  <input
+                    type="text"
+                    id="discord"
+                    class="form-control"
+                    formControlName="discord"
+                    [class.is-invalid]="registrationForm.get('discord')?.invalid && registrationForm.get('discord')?.touched"
+                    placeholder="dream#1234">
+                </div>
+
+                <!-- insta -->
+                <div class="mb-3">
+                  <label for="insta" class="form-label fw-bold">
+                    <i class="bi bi-envelope"></i> insta
+                  </label>
+                  <input
+                    type="text"
+                    id="insta"
+                    class="form-control"
+                    formControlName="insta"
+                    [class.is-invalid]="registrationForm.get('insta')?.invalid && registrationForm.get('insta')?.touched"
+                    placeholder="insta">
+                </div>
+
                 <!-- Classe -->
                 <div class="mb-3">
                   <label for="classe" class="form-label fw-bold">
@@ -204,7 +232,9 @@ export class RegistrationComponent {
       nom: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       classe: ['', [Validators.required]],
-      motivation: ['']
+      discord: [''],
+      insta:[''],
+      motivation: [''],
     });
   }
 
@@ -219,7 +249,10 @@ export class RegistrationComponent {
         prenom: this.registrationForm.value.prenom.trim(),
         email: this.registrationForm.value.email.trim().toLowerCase(),
         classe: this.registrationForm.value.classe,
-        motivation: this.registrationForm.value.motivation.trim()
+        motivation: this.registrationForm.value.motivation.trim(),
+        discord: this.registrationForm.value.discord.trim(),
+        insta: this.registrationForm.value.insta.trim(),
+
       };
 
       this.apiService.createInscription(inscriptionData).subscribe({

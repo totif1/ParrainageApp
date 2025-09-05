@@ -24,8 +24,8 @@ class Inscription
         $this->validateInscriptionData($data);
 
         try {
-            $sql = "INSERT INTO inscriptions (nom, prenom, email, classe, motivation) 
-                    VALUES (:nom, :prenom, :email, :classe, :motivation)";
+            $sql = "INSERT INTO inscriptions (nom, prenom, email, classe, motivation,discord, insta) 
+                    VALUES (:nom, :prenom, :email, :classe, :motivation,:discord , :insta)";
 
             $stmt = $this->db->prepare($sql);
             $result = $stmt->execute([
@@ -33,7 +33,11 @@ class Inscription
                 ':prenom' => $data['prenom'],
                 ':email' => $data['email'],
                 ':classe' => $data['classe'],
-                ':motivation' => $data['motivation'] ?? ''
+                ':motivation' => $data['motivation'] ?? '',
+                ':discord' => $data['discord'] ?? '',
+                                ':insta' => $data['insta'] ?? ''
+
+
             ]);
 
             if (!$result) {

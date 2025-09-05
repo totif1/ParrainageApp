@@ -21,8 +21,11 @@ class AuthController
      */
     public function login(): void
     {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+
         try {
-            // Récupérer les données JSON
             $input = json_decode(file_get_contents('php://input'), true);
 
             if (!$input) {
@@ -37,7 +40,6 @@ class AuthController
             $username = trim($input['username'] ?? '');
             $password = $input['password'] ?? '';
 
-            // Validation des données
             if (empty($username) || empty($password)) {
                 http_response_code(400);
                 echo json_encode([
@@ -47,7 +49,6 @@ class AuthController
                 return;
             }
 
-            // Authentification
             $admin = $this->adminModel->authenticate($username, $password);
 
             if (!$admin) {
@@ -59,12 +60,12 @@ class AuthController
                 return;
             }
 
-            // Générer le token JWT
             $token = $this->auth->generateToken([
                 'admin_id' => $admin['id'],
                 'username' => $admin['username']
             ]);
 
+            // SEULEMENT LE JSON - rien d'autre
             echo json_encode([
                 'success' => true,
                 'message' => 'Connexion réussie',
@@ -77,7 +78,6 @@ class AuthController
 
         } catch (\Exception $e) {
             error_log('Erreur connexion admin: ' . $e->getMessage());
-
             http_response_code(500);
             echo json_encode([
                 'success' => false,

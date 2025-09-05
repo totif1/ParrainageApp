@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
+    curl \
     && docker-php-ext-install \
     pdo \
     pdo_mysql \
@@ -31,7 +32,17 @@ COPY . .
 RUN mkdir -p logs \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
+    && if [ -f public/.htaccess ]; then chmod 644 public/.htaccess; fi \
     && chmod -R 777 logs
 
 # Copie de la configuration Apache
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
+
+# Configuration du ServerName pour éviter les warnings
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Exposition du port
+EXPOSE 80
+
+# Démarrage d'Apache
+CMD ["apache2-foreground"]

@@ -61,12 +61,16 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0",
+            "port": 4200
+          },
           "configurations": {
             "production": {
-              "buildTarget": "parrainage-but:build:production"
+              "browserTarget": "parrainage-but:build:production"
             },
             "development": {
-              "buildTarget": "parrainage-but:build:development"
+              "browserTarget": "parrainage-but:build:development"
             }
           },
           "defaultConfiguration": "development"

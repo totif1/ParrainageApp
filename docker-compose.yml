@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   database:
     image: mysql:8.0
@@ -16,9 +18,11 @@ services:
     networks:
       - parrainage_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "parrainage_user", "-pparrainage_password"]
       timeout: 20s
       retries: 10
+      interval: 30s
+      start_period: 30s
 
   backend:
     build:
@@ -27,7 +31,10 @@ services:
     container_name: parrainage_backend
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8081:80"
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/vendor
     depends_on:
       database:
         condition: service_healthy
@@ -35,13 +42,11 @@ services:
       - DB_HOST=database
       - DB_NAME=parrainage_db
       - DB_USER=parrainage_user
-      - DB_PASS=parrainage_password
+      - DB_PASSWORD=parrainage_password
+      - APP_ENV=development
+      - APP_DEBUG=true
     networks:
       - parrainage_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/"]
-      timeout: 10s
-      retries: 5
 
   frontend:
     build:
@@ -50,17 +55,20 @@ services:
     container_name: parrainage_frontend
     restart: unless-stopped
     ports:
-      - "4200:80"
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     networks:
       - parrainage_network
 
 networks:
   parrainage_network:
-    driver: bridge
-    name: parrainage_network
 
 volumes:
   mysql_data:

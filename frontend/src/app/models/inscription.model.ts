@@ -14,6 +14,8 @@ export interface InscriptionRequest {
   email: string;
   classe: string;
   motivation: string;
+  discord: string;
+  insta :string;
 }
 
 export interface ApiResponse<T> {

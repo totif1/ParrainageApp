@@ -40,7 +40,9 @@ class InscriptionController
                 'prenom' => trim($input['prenom'] ?? ''),
                 'email' => trim(strtolower($input['email'] ?? '')),
                 'classe' => $input['classe'] ?? '',
-                'motivation' => trim($input['motivation'] ?? '')
+                'motivation' => trim($input['motivation'] ?? ''),
+                'discord' => trim($input['discord'] ?? ''),
+                'insta' => trim($input['insta'] ?? '')
             ];
 
             // Créer l'inscription

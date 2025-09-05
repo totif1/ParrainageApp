@@ -62,6 +62,7 @@ class Connection
     }
 
     // Empêcher le clonage et la désérialisation
-    private function __clone() {}
-    private function __wakeup() {}
+
+    public function __clone() {}
+    public function __wakeup() {}
 }
