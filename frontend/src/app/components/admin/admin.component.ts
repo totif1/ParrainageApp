@@ -145,6 +145,39 @@ export class AdminComponent implements OnInit {
       }
     }, 0);
   }
+  delete(inscription: Inscription): void {
+    // Demander confirmation
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer l'inscription de ${inscription.prenom} ${inscription.nom} ?`)) {
+      return;
+    }
+
+    if (!inscription.id) {
+      console.error('ID de l\'inscription manquant');
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.apiService.delete(inscription.id).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.success) {
+          // Supprimer l'inscription de la liste locale
+          this.inscriptions = this.inscriptions.filter(i => i.id !== inscription.id);
+          console.log('✅ Inscription supprimée avec succès');
+
+        } else {
+          this.errorMessage = response.message || 'Erreur lors de la suppression';
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Erreur lors de la suppression:', error);
+        this.errorMessage = 'Erreur de connexion au serveur';
+      }
+    });
+  }
 
   formatDate(dateString?: string): string {
     if (!dateString) return 'N/A';
@@ -165,4 +198,5 @@ export class AdminComponent implements OnInit {
   goHome(): void {
     this.router.navigate(['/']);
   }
+
 }

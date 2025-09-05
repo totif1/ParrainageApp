@@ -73,6 +73,15 @@ export class ApiService {
       );
   }
 
+  delete(id: number): Observable<ApiResponse<{}>> {
+    console.log('🗑️ Suppression inscription ID:', id);
+
+    const headers = this.getAuthHeaders();
+    return this.http.delete<ApiResponse<{}>>(`${this.baseUrl}/inscriptions/${id}`, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
   // Vérifier si l'utilisateur est connecté
   isAuthenticated(): boolean {
     const token = localStorage.getItem('admin_token');
@@ -130,4 +139,6 @@ export class ApiService {
 
     return throwError(() => errorMessage);
   }
+
+
 }

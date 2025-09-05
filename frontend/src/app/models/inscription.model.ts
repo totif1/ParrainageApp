@@ -6,6 +6,8 @@ export interface Inscription {
   classe: 'BUT1' | 'BUT2' | 'BUT3';
   motivation?: string;
   date_inscription?: string;
+  discord: string;
+  insta :string;
 }
 
 export interface InscriptionRequest {

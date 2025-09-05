@@ -23,8 +23,8 @@ if (empty($uri) || $uri === '/') {
 error_log("Request: $method $uri (original: " . $_SERVER['REQUEST_URI'] . ")");
 
 try {
-    switch ($uri) {
-        case '/auth/login':
+    switch (true) {
+        case $uri === '/auth/login':
             if ($method === 'POST') {
                 $controller = new AuthController();
                 $controller->login();
@@ -34,7 +34,7 @@ try {
             }
             break;
 
-        case '/auth/logout':
+        case $uri === '/auth/logout':
             if ($method === 'POST') {
                 $controller = new AuthController();
                 $controller->logout();
@@ -44,7 +44,7 @@ try {
             }
             break;
 
-        case '/inscriptions':
+        case $uri === '/inscriptions':
             if ($method === 'POST') {
                 $controller = new InscriptionController();
                 $controller->create();
@@ -57,17 +57,41 @@ try {
             }
             break;
 
-        case '/inscriptions/stats':
+        case preg_match('/^\/inscriptions\/(\d+)$/', $uri, $matches):
+            $id = (int)$matches[1];
             if ($method === 'GET') {
                 $controller = new InscriptionController();
-                $controller->getStats();
+                $controller->getById($id);
+            } elseif ($method === 'DELETE') {
+                $controller = new InscriptionController();
+                $controller->delete($id);
             } else {
                 http_response_code(405);
                 echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
             }
             break;
 
-        case '/health':
+        case $uri === '/inscriptions/stats':
+            if ($method === 'GET') {
+                $controller = new InscriptionController();
+                $controller->getStatistics();
+            } else {
+                http_response_code(405);
+                echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            }
+            break;
+
+        case $uri === '/inscriptions/export':
+            if ($method === 'GET') {
+                $controller = new InscriptionController();
+                $controller->exportCsv();
+            } else {
+                http_response_code(405);
+                echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+            }
+            break;
+
+        case $uri === '/health':
             echo json_encode([
                 'success' => true,
                 'message' => 'API Parrainage BUT Informatique',
@@ -77,7 +101,10 @@ try {
                     'POST /api/auth/login' => 'Connexion admin',
                     'POST /api/inscriptions' => 'Créer une inscription',
                     'GET /api/inscriptions' => 'Récupérer les inscriptions (admin)',
-                    'GET /api/inscriptions/stats' => 'Statistiques (admin)'
+                    'GET /api/inscriptions/{id}' => 'Récupérer une inscription (admin)',
+                    'DELETE /api/inscriptions/{id}' => 'Supprimer une inscription (admin)',
+                    'GET /api/inscriptions/stats' => 'Statistiques (admin)',
+                    'GET /api/inscriptions/export' => 'Export CSV (admin)'
                 ]
             ]);
             break;

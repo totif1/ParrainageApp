@@ -192,6 +192,9 @@
               <th scope="col">Nom</th>
               <th scope="col">Prénom</th>
               <th scope="col">Email</th>
+              <th scope="col">Discord</th>
+              <th scope="col">insta</th>
+
               <th scope="col">Classe</th>
               <th scope="col">Date d'inscription</th>
               <th scope="col">Action</th>
@@ -207,6 +210,9 @@
                   {{ inscription.email }}
                 </a>
               </td>
+              <td>{{ inscription.discord }}</td>
+              <td>{{ inscription.insta }}</td>
+
               <td>
                       <span
                         class="badge"
@@ -218,12 +224,21 @@
               </td>
               <td>{{ formatDate(inscription.date_inscription) }}</td>
               <td>
+                <div class="d-flex flex-column">
                 <button
                   type="button"
                   class="btn btn-sm btn-outline-info"
                   (click)="showDetails(inscription)">
                   <i class="bi bi-eye"></i> Détails
                 </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="delete(inscription)">
+                    <i class="bi bi-eye"></i> Supprimer
+                  </button>
+
+                </div>
               </td>
             </tr>
             </tbody>
