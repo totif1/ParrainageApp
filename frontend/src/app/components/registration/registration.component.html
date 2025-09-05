@@ -107,9 +107,17 @@
                 formControlName="classe"
                 [class.is-invalid]="registrationForm.get('classe')?.invalid && registrationForm.get('classe')?.touched">
                 <option value="">-- Sélectionnez votre niveau --</option>
-                <option value="BUT1">BUT1 - Première année (cherche un parrain/marraine)</option>
-                <option value="BUT2">BUT2 - Deuxième année (peut être parrain/marraine)</option>
-                <option value="BUT3">BUT3 - Troisième année (peut être parrain/marraine)</option>
+                <option value="BUT1INFO">BUT 1 - informatique - Première année (cherche un parrain/marraine)</option>
+                <option value="BUT2INFO">BUT 2 - informatique - Deuxième année (peut être parrain/marraine)</option>
+                <option value="BUT3INFO"> BUT 3 - informatique - Troisième année (peut être parrain/marraine)</option>
+
+                <option value="BUT1GEA">BUT 1 - GEA - Première année (cherche un parrain/marraine)</option>
+                <option value="BUT2GEA">BUT 2 - GEA - Deuxième année (peut être parrain/marraine)</option>
+                <option value="BUT3GEA">BUT 3 -GEA - Troisième année (peut être parrain/marraine)</option>
+
+                <option value="BTS1AC">BTS 1 - aquaculture - Première année (cherche un parrain/marraine)</option>
+                <option value="BTS2AC">BTS 2 - aquaculture - Deuxième année (peut être parrain/marraine)</option>
+
               </select>
               <div class="invalid-feedback"
                    *ngIf="registrationForm.get('classe')?.invalid && registrationForm.get('classe')?.touched">

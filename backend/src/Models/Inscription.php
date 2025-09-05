@@ -68,7 +68,7 @@ class Inscription
             $conditions = [];
 
             // Filtrage par classe
-            if (!empty($filters['classe']) && in_array($filters['classe'], ['BUT1', 'BUT2', 'BUT3'])) {
+            if (!empty($filters['classe']) && in_array($filters['classe'], ['BUT1INFO', 'BUT2INFO', 'BUT3INFO','BUT1GEA', 'BUT2GEA', 'BUT3GEA','BTS1AC', 'BTS2AC'])) {
                 $conditions[] = "classe = :classe";
                 $params[':classe'] = $filters['classe'];
             }
@@ -193,8 +193,8 @@ class Inscription
         }
 
         // Classe valide
-        if (empty($data['classe']) || !in_array($data['classe'], ['BUT1', 'BUT2', 'BUT3'])) {
-            $errors[] = 'La classe doit être BUT1, BUT2 ou BUT3';
+        if (empty($data['classe']) || !in_array($data['classe'], ['BUT1INFO', 'BUT2INFO', 'BUT3INFO','BUT1GEA', 'BUT2GEA', 'BUT3GEA','BTS1AC', 'BTS2AC'])) {
+            $errors[] = 'La classe doit être BUT1INFO BUT2INFO BUT3INFO BUT1GEA BUT2GEA BUT3GEA BTS1AC BTS2AC';
         }
 
         // Longueur de la motivation

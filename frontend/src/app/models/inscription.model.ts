@@ -3,7 +3,7 @@ export interface Inscription {
   nom: string;
   prenom: string;
   email: string;
-  classe: 'BUT1' | 'BUT2' | 'BUT3';
+  classe: 'BUT1INFO' | 'BUT2INFO'| 'BUT3INFO'|'BUT1GEA'| 'BUT2GEA'| 'BUT3GEA'|'BTS1AC'| 'BTS2AC';
   motivation?: string;
   date_inscription?: string;
   discord: string;
