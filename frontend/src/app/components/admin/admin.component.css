@@ -1,0 +1,25 @@
+
+.card {
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table th {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.btn.active {
+  background-color: var(--bs-primary);
+  color: white;
+  border-color: var(--bs-primary);
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
