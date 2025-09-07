@@ -16,6 +16,10 @@
   transition: all 0.3s;
 }
 
+#textCallToAction {
+  text-align: center;
+}
+
 .btn-success:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(17, 153, 142, 0.3);
