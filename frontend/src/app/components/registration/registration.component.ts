@@ -17,6 +17,9 @@ export class RegistrationComponent {
   isSubmitting = false;
   successMessage = '';
   errorMessage = '';
+  preferenceInfo = '';
+  preferenceInfoClass = '';
+  showPreferenceInfo = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,12 +32,80 @@ export class RegistrationComponent {
       email: ['', [Validators.required, Validators.email]],
       classe: ['', [Validators.required]],
       discord: [''],
-      insta:[''],
+      insta: [''],
       motivation: [''],
+      preference: ['', [Validators.required]]
+    });
+
+    // Écouter les changements de classe
+    this.registrationForm.get('classe')?.valueChanges.subscribe(classe => {
+      this.updatePreference(classe);
     });
   }
 
+  private updatePreference(selectedClasse: string): void {
+    const preferenceControl = this.registrationForm.get('preference');
+
+    if (!selectedClasse) {
+      preferenceControl?.enable();
+      preferenceControl?.setValue('');
+      this.showPreferenceInfo = false;
+      return;
+    }
+
+    // 1ère année : automatiquement filleul
+    if (selectedClasse.includes('1')) {
+      preferenceControl?.setValue('FILLEUL');
+      preferenceControl?.disable();
+
+      this.preferenceInfo = '🎓 Première année : Vous serez automatiquement assigné(e) comme filleul(e) pour bénéficier de l\'accompagnement d\'un étudiant plus expérimenté.';
+      this.preferenceInfoClass = 'alert alert-info';
+      this.showPreferenceInfo = true;
+    }
+    // 3ème année (BUT3) ou 2ème année BTS : automatiquement parrain
+    else if (selectedClasse.includes('3') || selectedClasse === 'BTS2AC') {
+      preferenceControl?.setValue('PARRAIN');
+      preferenceControl?.disable();
+
+      this.preferenceInfo = '🏆 Niveau avancé : Vous serez automatiquement assigné(e) comme parrain/marraine pour accompagner un étudiant de première année.';
+      this.preferenceInfoClass = 'alert alert-warning';
+      this.showPreferenceInfo = true;
+    }
+    // 2ème année BUT et GEA : libre choix
+    else if (selectedClasse.includes('2') && !selectedClasse.includes('BTS')) {
+      preferenceControl?.enable();
+      preferenceControl?.setValue('');
+
+      this.preferenceInfo = '✨ Deuxième année : Vous pouvez choisir d\'être parrain/marraine ou filleul(e) selon vos préférences.';
+      this.preferenceInfoClass = 'alert alert-success';
+      this.showPreferenceInfo = true;
+    }
+  }
+
+  isPreferenceDisabled(): boolean {
+    const classe = this.registrationForm.get('classe')?.value;
+    return classe?.includes('1') || classe?.includes('3') || classe === 'BTS2AC';
+  }
+
+  isParrainDisabled(): boolean {
+    const classe = this.registrationForm.get('classe')?.value;
+    return classe?.includes('1'); // Seulement les 1ères années ne peuvent pas être parrain
+  }
+
+  isFilleulDisabled(): boolean {
+    const classe = this.registrationForm.get('classe')?.value;
+    return classe?.includes('3') || classe === 'BTS2AC'; // Les 3èmes années et BTS2 ne peuvent pas être filleul
+  }
+
   onSubmit(): void {
+    // Réactiver temporairement le contrôle preference pour la validation
+    const preferenceControl = this.registrationForm.get('preference');
+    const wasDisabled = preferenceControl?.disabled;
+
+    if (wasDisabled) {
+      preferenceControl?.enable();
+    }
+
     if (this.registrationForm.valid) {
       this.isSubmitting = true;
       this.successMessage = '';
@@ -48,7 +119,7 @@ export class RegistrationComponent {
         motivation: this.registrationForm.value.motivation.trim(),
         discord: this.registrationForm.value.discord.trim(),
         insta: this.registrationForm.value.insta.trim(),
-
+        preference: this.registrationForm.value.preference
       };
 
       this.apiService.createInscription(inscriptionData).subscribe({
@@ -57,6 +128,7 @@ export class RegistrationComponent {
           if (response.success) {
             this.successMessage = 'Inscription réussie ! Vous recevrez bientôt un email de confirmation.';
             this.registrationForm.reset();
+            this.showPreferenceInfo = false;
             // Redirection automatique après 3 secondes
             setTimeout(() => {
               this.router.navigate(['/']);
@@ -76,6 +148,11 @@ export class RegistrationComponent {
       Object.keys(this.registrationForm.controls).forEach(key => {
         this.registrationForm.get(key)?.markAsTouched();
       });
+    }
+
+    // Remettre le contrôle en état disabled si nécessaire
+    if (wasDisabled) {
+      preferenceControl?.disable();
     }
   }
 

@@ -1,4 +1,3 @@
-
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-lg-6">
@@ -68,32 +67,30 @@
               </div>
             </div>
 
-            <!-- discord -->
+            <!-- Discord -->
             <div class="mb-3">
               <label for="discord" class="form-label fw-bold">
-                <i class="bi bi-envelope"></i> discord
+                <i class="bi bi-discord"></i> Discord
               </label>
               <input
                 type="text"
                 id="discord"
                 class="form-control"
                 formControlName="discord"
-                [class.is-invalid]="registrationForm.get('discord')?.invalid && registrationForm.get('discord')?.touched"
-                placeholder="dream#1234">
+                placeholder="discord#1234">
             </div>
 
-            <!-- insta -->
+            <!-- Instagram -->
             <div class="mb-3">
               <label for="insta" class="form-label fw-bold">
-                <i class="bi bi-envelope"></i> insta
+                <i class="bi bi-instagram"></i> Instagram
               </label>
               <input
                 type="text"
                 id="insta"
                 class="form-control"
                 formControlName="insta"
-                [class.is-invalid]="registrationForm.get('insta')?.invalid && registrationForm.get('insta')?.touched"
-                placeholder="insta">
+                placeholder="@votre_insta">
             </div>
 
             <!-- Classe -->
@@ -109,19 +106,59 @@
                 <option value="">-- Sélectionnez votre niveau --</option>
                 <option value="BUT1INFO">BUT 1 - informatique - Première année (cherche un parrain/marraine)</option>
                 <option value="BUT2INFO">BUT 2 - informatique - Deuxième année (peut être parrain/marraine)</option>
-                <option value="BUT3INFO"> BUT 3 - informatique - Troisième année (peut être parrain/marraine)</option>
-
+                <option value="BUT3INFO">BUT 3 - informatique - Troisième année (peut être parrain/marraine)</option>
                 <option value="BUT1GEA">BUT 1 - GEA - Première année (cherche un parrain/marraine)</option>
                 <option value="BUT2GEA">BUT 2 - GEA - Deuxième année (peut être parrain/marraine)</option>
-                <option value="BUT3GEA">BUT 3 -GEA - Troisième année (peut être parrain/marraine)</option>
-
+                <option value="BUT3GEA">BUT 3 - GEA - Troisième année (peut être parrain/marraine)</option>
                 <option value="BTS1AC">BTS 1 - aquaculture - Première année (cherche un parrain/marraine)</option>
                 <option value="BTS2AC">BTS 2 - aquaculture - Deuxième année (peut être parrain/marraine)</option>
-
               </select>
               <div class="invalid-feedback"
                    *ngIf="registrationForm.get('classe')?.invalid && registrationForm.get('classe')?.touched">
                 Veuillez sélectionner votre niveau d'étude.
+              </div>
+            </div>
+
+            <!-- Préférence Parrain/Filleul -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                <i class="bi bi-people"></i> Vous préférez être :
+              </label>
+              <div class="form-check mt-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="filleul"
+                  value="FILLEUL"
+                  formControlName="preference"
+                  [disabled]="isFilleulDisabled()">
+                <label class="form-check-label" for="filleul">
+                  <i class="bi bi-person-heart text-info"></i> Filleul(e)
+                  <small class="text-muted d-block">Être accompagné par un étudiant plus expérimenté</small>
+                </label>
+              </div>
+              <div class="mt-2">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="parrain"
+                    value="PARRAIN"
+                    formControlName="preference"
+                    [disabled]="isParrainDisabled()">
+                  <label class="form-check-label" for="parrain">
+                    <i class="bi bi-award text-warning"></i> Parrain/Marraine
+                    <small class="text-muted d-block">Accompagner un étudiant plus jeune</small>
+                  </label>
+                </div>
+
+              </div>
+
+              <!-- Message d'information dynamique -->
+
+              <div class="invalid-feedback d-block"
+                   *ngIf="registrationForm.get('preference')?.invalid && registrationForm.get('preference')?.touched">
+                Veuillez sélectionner une préférence.
               </div>
             </div>
 
