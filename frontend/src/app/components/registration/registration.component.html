@@ -82,10 +82,10 @@
                 placeholder="dream#1234">
             </div>
 
-            <!-- insta -->
+            <!-- Instagram -->
             <div class="mb-3">
               <label for="insta" class="form-label fw-bold">
-                <i class="bi bi-instagram"></i> insta
+                <i class="bi bi-instagram"></i> Instagram
               </label>
               <input
                 type="text"
@@ -122,6 +122,49 @@
               <div class="invalid-feedback"
                    *ngIf="registrationForm.get('classe')?.invalid && registrationForm.get('classe')?.touched">
                 Veuillez sélectionner votre niveau d'étude.
+              </div>
+            </div>
+
+            <!-- Préférence Parrain/Filleul -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                <i class="bi bi-people"></i> Vous préférez être :
+              </label>
+              <div class="form-check mt-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  id="filleul"
+                  value="FILLEUL"
+                  formControlName="preference"
+                  [disabled]="isFilleulDisabled()">
+                <label class="form-check-label" for="filleul">
+                  <i class="bi bi-person-heart text-info"></i> Filleul(e)
+                  <small class="text-muted d-block">Être accompagné par un étudiant plus expérimenté</small>
+                </label>
+              </div>
+              <div class="mt-2">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    id="parrain"
+                    value="PARRAIN"
+                    formControlName="preference"
+                    [disabled]="isParrainDisabled()">
+                  <label class="form-check-label" for="parrain">
+                    <i class="bi bi-award text-warning"></i> Parrain/Marraine
+                    <small class="text-muted d-block">Accompagner un étudiant plus jeune</small>
+                  </label>
+                </div>
+
+              </div>
+
+              <!-- Message d'information dynamique -->
+
+              <div class="invalid-feedback d-block"
+                   *ngIf="registrationForm.get('preference')?.invalid && registrationForm.get('preference')?.touched">
+                Veuillez sélectionner une préférence.
               </div>
             </div>
 

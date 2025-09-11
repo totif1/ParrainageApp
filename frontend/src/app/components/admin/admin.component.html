@@ -302,6 +302,7 @@
               <th scope="col">Discord</th>
               <th scope="col">Instagram</th>
               <th scope="col">Classe</th>
+              <th scope="col">preference</th>
               <th scope="col">Date d'inscription</th>
               <th scope="col">Actions</th>
             </tr>
@@ -328,6 +329,7 @@
                   {{ inscription.classe }}
                 </span>
               </td>
+              <td> {{inscription.preference ?? ''}}</td>
               <td>{{ formatDate(inscription.date_inscription) }}</td>
               <td>
                 <div class="d-flex gap-1">

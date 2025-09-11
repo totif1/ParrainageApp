@@ -41,6 +41,7 @@ class InscriptionController
                 'email' => trim(strtolower($input['email'] ?? '')),
                 'classe' => $input['classe'] ?? '',
                 'motivation' => trim($input['motivation'] ?? ''),
+                'preference' => trim($input['preference'] ?? ''),
                 'discord' => trim($input['discord'] ?? ''),
                 'insta' => trim($input['insta'] ?? '')
             ];

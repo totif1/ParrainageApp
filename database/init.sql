@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS inscriptions (
     motivation TEXT,
     discord TEXT,
     insta TEXT,
+    preference ENUM('PARRAIN','FILLEUL'),
     date_inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_classe (classe),
     INDEX idx_date (date_inscription)

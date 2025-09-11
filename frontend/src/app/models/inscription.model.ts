@@ -8,6 +8,7 @@ export interface Inscription {
   date_inscription?: string;
   discord: string;
   insta :string;
+  preference : 'PARRAIN' | 'FILLEUL'
 }
 
 export interface InscriptionRequest {
@@ -18,6 +19,7 @@ export interface InscriptionRequest {
   motivation: string;
   discord: string;
   insta :string;
+  preference: string;
 }
 
 export interface ApiResponse<T> {

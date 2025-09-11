@@ -5,7 +5,7 @@ Une application web complète pour gérer un système de parrainage entre étudi
 ## 🚀 Fonctionnalités
 
 ### 🏠 Page d'accueil
-- Présentation du principe du parrainage
+- Présentation du principe du  parrainage
 - Statistiques du système
 - Design moderne et responsive
 
