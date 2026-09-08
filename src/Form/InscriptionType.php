@@ -21,12 +21,15 @@ class InscriptionType extends AbstractType
         $builder
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
+                'attr' => ['placeholder' => 'Léa'],
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
+                'attr' => ['placeholder' => 'Ton nom'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
+                'attr' => ['placeholder' => 'prenom.nom@etu.umontpellier.fr'],
             ])
             ->add('classe', EnumType::class, [
                 'class' => Classe::class,
@@ -39,20 +42,31 @@ class InscriptionType extends AbstractType
                 'label' => 'Je souhaite…',
                 'expanded' => true,
                 'choice_label' => fn (Preference $p) => $p->label(),
+                'choice_attr' => fn (Preference $p) => [
+                    'data-hint' => $p === Preference::PARRAIN
+                        ? 'Tu es en 2e ou 3e année'
+                        : 'Tu arrives cette année',
+                ],
                 'constraints' => [new NotNull(message: 'Indique ce que tu recherches.')],
             ])
             ->add('motivation', TextareaType::class, [
                 'label' => 'Motivation',
                 'required' => false,
-                'attr' => ['rows' => 4, 'maxlength' => 1000],
+                'attr' => [
+                    'rows' => 4,
+                    'maxlength' => 1000,
+                    'placeholder' => 'Ce que tu aimes, ce sur quoi tu peux aider, tes dispos…',
+                ],
             ])
             ->add('discord', TextType::class, [
-                'label' => 'Pseudo Discord',
+                'label' => 'Discord · optionnel',
                 'required' => false,
+                'attr' => ['placeholder' => 'lea#0000'],
             ])
             ->add('insta', TextType::class, [
-                'label' => 'Compte Instagram',
+                'label' => 'Instagram · optionnel',
                 'required' => false,
+                'attr' => ['placeholder' => '@ton_compte'],
             ])
         ;
     }

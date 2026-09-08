@@ -26,4 +26,18 @@ enum Classe: string
             self::BTS2AC => 'BTS 2 AC',
         };
     }
+
+    public function shortLabel(): string
+    {
+        return match ($this) {
+            self::BUT1INFO => 'BUT 1 Info',
+            self::BUT2INFO => 'BUT 2 Info',
+            self::BUT3INFO => 'BUT 3 Info',
+            self::BUT1GEA => 'BUT 1 GEA',
+            self::BUT2GEA => 'BUT 2 GEA',
+            self::BUT3GEA => 'BUT 3 GEA',
+            self::BTS1AC => 'BTS 1 AC',
+            self::BTS2AC => 'BTS 2 AC',
+        };
+    }
 }

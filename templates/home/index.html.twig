@@ -3,49 +3,69 @@
 {% block title %}Parrainage BUT Informatique — Accueil{% endblock %}
 
 {% block body %}
-    <section class="text-center">
-        <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            Trouve ton parrain ou ta marraine 🎓
-        </h1>
-        <p class="mx-auto mt-4 max-w-2xl text-slate-600">
-            Le système de parrainage met en relation les étudiant·es qui débutent avec celles et ceux
-            qui connaissent déjà les rouages du BUT. Entraide, conseils, et un point de repère dès la rentrée.
-        </p>
-        <div class="mt-8 flex justify-center gap-3">
-            <a href="{{ path('inscription') }}"
-               class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
-                Je m'inscris
-            </a>
+    <section class="relative overflow-hidden pb-4 pt-4">
+        <div class="blob pointer-events-none absolute -right-24 -top-10 hidden h-[420px] w-[420px] bg-cyan sm:block"></div>
+        <div class="pointer-events-none absolute right-32 top-40 hidden h-52 w-52 rounded-full bg-lime mix-blend-multiply lg:block"></div>
+
+        <div class="relative max-w-2xl">
+            <span class="sticker -rotate-[3deg]">RENTRÉE 2026 — C'EST OUVERT</span>
+            <h1 class="mt-6 font-display text-[2.75rem] font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
+                Trouve ton
+                <span class="inline-block -rotate-[2deg] rounded-full bg-navy px-3 py-0.5 text-cream">parrain</span>
+                ou ta marraine
+            </h1>
+            <p class="mt-6 max-w-[44ch] text-lg leading-relaxed text-muted2">
+                Un binôme avec un·e étudiant·e de ta formation. L'asso s'occupe de l'appairage —
+                toi, tu racontes juste qui tu es.
+            </p>
+            <div class="mt-8 flex flex-wrap items-center gap-5">
+                <a href="{{ path('inscription') }}" class="btn-primary">Je m'inscris →</a>
+                <span class="border-b-2 border-lime pb-0.5 font-medium">Comment ça marche ?</span>
+            </div>
         </div>
     </section>
 
-    <section class="mt-14 grid gap-4 sm:grid-cols-3">
-        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
-            <div class="text-3xl font-bold text-slate-900">{{ stats.total }}</div>
-            <div class="mt-1 text-sm text-slate-500">inscriptions</div>
-        </div>
-        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
-            <div class="text-3xl font-bold text-slate-900">{{ stats.recent }}</div>
-            <div class="mt-1 text-sm text-slate-500">dans les dernières 24 h</div>
-        </div>
-        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
-            <div class="text-3xl font-bold text-slate-900">{{ stats.byClass|length }}</div>
-            <div class="mt-1 text-sm text-slate-500">classes représentées</div>
+    <section class="mt-10 rounded-t-[60px] rounded-b-[32px] bg-navy px-6 py-14 text-cream">
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:justify-around">
+            <div class="flex h-52 w-52 -rotate-[4deg] flex-col items-center justify-center rounded-full bg-cream text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.total }}</span>
+                <span class="mt-1 text-sm">inscriptions</span>
+            </div>
+            <div class="flex h-52 w-52 rotate-[3deg] flex-col items-center justify-center rounded-full bg-lime text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.recent }}</span>
+                <span class="mt-1 text-sm">dans les<br>dernières 24 h</span>
+            </div>
+            <div class="flex h-52 w-52 -rotate-[2deg] flex-col items-center justify-center rounded-full bg-cyan text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.byClass|length }}</span>
+                <span class="mt-1 text-sm">classes<br>représentées</span>
+            </div>
         </div>
     </section>
 
-    <section class="mt-14 grid gap-6 sm:grid-cols-3">
-        <div>
-            <h3 class="font-semibold text-slate-900">1. Tu t'inscris</h3>
-            <p class="mt-1 text-sm text-slate-600">Quelques infos : ta classe et si tu cherches à parrainer ou à être parrainé·e.</p>
-        </div>
-        <div>
-            <h3 class="font-semibold text-slate-900">2. On fait les binômes</h3>
-            <p class="mt-1 text-sm text-slate-600">L'équipe associe les profils en fonction des filières et des motivations.</p>
-        </div>
-        <div>
-            <h3 class="font-semibold text-slate-900">3. Vous échangez</h3>
-            <p class="mt-1 text-sm text-slate-600">Vous prenez contact via Discord ou Instagram et l'aventure commence.</p>
+    <section class="mt-16">
+        <h2 class="font-display text-4xl font-extrabold tracking-tight">Comment ça marche</h2>
+        <div class="mt-8 flex flex-col gap-5">
+            <div class="flex max-w-3xl items-center gap-7 rounded-[999px_40px_999px_40px] border border-line bg-white px-8 py-7 sm:px-11">
+                <span class="font-display text-5xl font-extrabold leading-none text-lime">01</span>
+                <div>
+                    <h3 class="font-display text-xl font-bold">Tu t'inscris</h3>
+                    <p class="mt-1 leading-relaxed text-muted2">Ta classe, ce que tu cherches, deux lignes sur toi. Deux minutes montre en main.</p>
+                </div>
+            </div>
+            <div class="flex max-w-3xl items-center gap-7 rounded-[40px_999px_40px_999px] border border-line bg-white px-8 py-7 sm:ml-24 sm:px-11">
+                <span class="font-display text-5xl font-extrabold leading-none text-cyandark">02</span>
+                <div>
+                    <h3 class="font-display text-xl font-bold">On fait les binômes</h3>
+                    <p class="mt-1 leading-relaxed text-muted2">Le bureau apparie par formation et par affinités, à la main.</p>
+                </div>
+            </div>
+            <div class="flex max-w-3xl items-center gap-7 rounded-[999px_40px_999px_40px] border border-line bg-white px-8 py-7 sm:ml-10 sm:px-11">
+                <span class="font-display text-5xl font-extrabold leading-none text-navy">03</span>
+                <div>
+                    <h3 class="font-display text-xl font-bold">Vous échangez</h3>
+                    <p class="mt-1 leading-relaxed text-muted2">Discord, Insta, café à la cafét' — la suite vous appartient.</p>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}

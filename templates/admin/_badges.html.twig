@@ -1,0 +1,21 @@
+{%- macro classe(classe) -%}
+    {%- if classe is null -%}
+        <span class="badge bg-[#eef3f6] text-[#3f484e]">—</span>
+    {%- elseif 'INFO' in classe.value -%}
+        <span class="badge bg-[#ddf0fa] text-[#005f8f]">{{ classe.shortLabel }}</span>
+    {%- elseif 'GEA' in classe.value -%}
+        <span class="badge bg-[#eef3f6] text-[#3f484e]">{{ classe.shortLabel }}</span>
+    {%- else -%}
+        <span class="badge bg-[#f1f6e2] text-[#4e6a0d]">{{ classe.shortLabel }}</span>
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro preference(preference) -%}
+    {%- if preference is null -%}
+        <span class="badge bg-[#eef3f6] text-[#3f484e]">—</span>
+    {%- elseif preference.value == 'PARRAIN' -%}
+        <span class="badge bg-lime font-bold text-navy">Parrain·e</span>
+    {%- else -%}
+        <span class="badge bg-navy text-cream">Filleul·e</span>
+    {%- endif -%}
+{%- endmacro -%}

@@ -1,0 +1,80 @@
+{# Thème de formulaire — direction « Vague & stickers » #}
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_row -%}
+    {%- set has_errors = form.vars.errors|length > 0 -%}
+    <div class="mb-4">
+        {{- form_label(form) -}}
+        {%- if has_errors -%}
+            {{- form_widget(form, {attr: (attr|default({}))|merge({class: (attr.class|default('') ~ ' field-error')|trim})}) -}}
+        {%- else -%}
+            {{- form_widget(form) -}}
+        {%- endif -%}
+        {{- form_errors(form) -}}
+        {{- form_help(form) -}}
+    </div>
+{%- endblock -%}
+
+{%- block form_label -%}
+    {%- if label is not same as(false) -%}
+        {%- if label is empty -%}
+            {%- set label = name|humanize -%}
+        {%- endif -%}
+        <label{% if id is defined %} for="{{ id }}"{% endif %} class="lbl mb-1.5 block">{{ label|trans({}, translation_domain) }}</label>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_help -%}
+    {%- if help is not empty -%}
+        <p class="mt-1.5 text-[13px] text-muted">{{ help|trans(help_translation_parameters, translation_domain) }}</p>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <div class="mt-2 flex flex-col items-start gap-1.5">
+            {%- for error in errors -%}
+                <span class="inline-flex items-center gap-2 rounded-full bg-[#fdece9] px-3.5 py-2 text-[13px] text-[#a51f16]">{{ error.message }}</span>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+{%- endblock -%}
+
+{%- block form_widget_simple -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' field w-full')|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' field field-textarea w-full')|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' field field-select w-full')|trim}) -%}
+    {{- parent() -}}
+{%- endblock -%}
+
+{%- block choice_widget_expanded -%}
+    <div id="{{ id }}" class="mt-2 grid gap-3.5 sm:grid-cols-2">
+        {%- for child in form -%}
+            <label class="group flex cursor-pointer items-start gap-3 rounded-[28px] border-[1.5px] border-linestrong bg-cream p-5 transition has-[:checked]:-rotate-2 has-[:checked]:border-navy has-[:checked]:bg-navy has-[:checked]:text-cream has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-[#cfeaf8]">
+                {{- form_widget(child) -}}
+                <span>
+                    <span class="block font-display text-lg font-bold leading-tight">{{ child.vars.label }}</span>
+                    {%- if child.vars.attr['data-hint'] is defined -%}
+                        <span class="mt-1 block text-sm text-muted group-has-[:checked]:text-[#b9c6ce]">{{ child.vars.attr['data-hint'] }}</span>
+                    {%- endif -%}
+                </span>
+            </label>
+        {%- endfor -%}
+    </div>
+{%- endblock -%}
+
+{%- block radio_widget -%}
+    <input type="radio" id="{{ id }}" name="{{ full_name }}"
+           {%- if value is not same as('') %} value="{{ value }}"{% endif %}
+           {%- if checked %} checked="checked"{% endif %}
+           {%- if required %} required="required"{% endif %}
+           class="mt-1 h-4 w-4 shrink-0 accent-cyandark">
+{%- endblock -%}

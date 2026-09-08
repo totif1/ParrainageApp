@@ -1,14 +1,87 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ */
+/*  Direction « Vague & stickers » — palette IUT Montpellier–Sète      */
+/* ------------------------------------------------------------------ */
+@theme {
+    --color-cream: #FBF6EC;
+    --color-lime: #A6CE39;
+    --color-cyan: #00A3DD;
+    --color-cyandark: #007BB8;
+    --color-cyandarker: #005f8f;
+    --color-navy: #12232E;
+    --color-navysoft: #1b3646;
+    --color-muted: #5b6b76;
+    --color-muted2: #3c4c57;
+    --color-line: #ece3d1;
+    --color-linestrong: #dfd6c2;
+
+    --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
 @layer base {
-    input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
-    select,
-    textarea {
-        @apply block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm;
-        @apply focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500;
+    body {
+        @apply bg-cream font-sans text-navy antialiased;
+    }
+}
+
+/* Blob organique repris de la courbe du logo */
+@utility blob {
+    border-radius: 60% 40% 55% 45% / 50% 55% 45% 50%;
+}
+
+@layer components {
+    /* --- Champs de formulaire ------------------------------------- */
+    .field {
+        @apply rounded-full border-[1.5px] border-linestrong bg-cream px-5 py-3.5 text-[15px] text-navy;
+        @apply placeholder:text-[#a49a86];
+        @apply focus:border-cyandark focus:outline-none focus:ring-4 focus:ring-[#cfeaf8];
+    }
+    .field-textarea {
+        @apply min-h-28 rounded-[32px] py-4 leading-relaxed;
+    }
+    .field-select {
+        @apply appearance-none pr-11;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' stroke='%235b6b76' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1.1rem center;
+    }
+    .field-error {
+        @apply border-2 border-[#d7372a] focus:ring-[#fdece9];
     }
 
-    label {
-        @apply text-sm font-medium text-slate-700;
+    .lbl {
+        @apply font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-muted;
+    }
+
+    /* --- Boutons (tous en pilule) ------------------------------------ */
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 rounded-full bg-cyandark px-8 py-4 font-display text-[17px] font-bold text-white transition;
+        @apply hover:bg-cyandarker focus:outline-none focus:ring-4 focus:ring-[#cfeaf8];
+    }
+    .btn-accent {
+        @apply inline-flex items-center gap-2 rounded-full bg-lime px-5 py-2.5 font-medium text-navy transition hover:brightness-95;
+    }
+    .btn-dark {
+        @apply inline-flex items-center gap-2 rounded-full bg-navy px-5 py-2.5 font-medium text-cream transition hover:bg-navysoft;
+    }
+    .btn-ghost {
+        @apply inline-flex items-center gap-2 rounded-full border-[1.5px] border-navy px-5 py-2.5 font-medium text-navy transition hover:bg-navy hover:text-cream;
+    }
+
+    /* --- Stickers / badges / flash --------------------------------- */
+    .sticker {
+        @apply inline-block rounded-full bg-lime px-3.5 py-2 font-mono text-[12px] font-medium text-navy;
+    }
+    .badge {
+        @apply inline-block rounded-full px-3 py-1 text-xs font-medium;
+    }
+    .flash-ok {
+        @apply rounded-full bg-[#f1f6e2] px-5 py-3 text-sm text-[#3f5a08];
+    }
+    .flash-err {
+        @apply rounded-full bg-[#fdece9] px-5 py-3 text-sm text-[#a51f16];
     }
 }
