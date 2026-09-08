@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Parrainage BUT Informatique — Accueil{% endblock %}
+
+{% block body %}
+    <section class="text-center">
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            Trouve ton parrain ou ta marraine 🎓
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-slate-600">
+            Le système de parrainage met en relation les étudiant·es qui débutent avec celles et ceux
+            qui connaissent déjà les rouages du BUT. Entraide, conseils, et un point de repère dès la rentrée.
+        </p>
+        <div class="mt-8 flex justify-center gap-3">
+            <a href="{{ path('inscription') }}"
+               class="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                Je m'inscris
+            </a>
+        </div>
+    </section>
+
+    <section class="mt-14 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
+            <div class="text-3xl font-bold text-slate-900">{{ stats.total }}</div>
+            <div class="mt-1 text-sm text-slate-500">inscriptions</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
+            <div class="text-3xl font-bold text-slate-900">{{ stats.recent }}</div>
+            <div class="mt-1 text-sm text-slate-500">dans les dernières 24 h</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-6 text-center">
+            <div class="text-3xl font-bold text-slate-900">{{ stats.byClass|length }}</div>
+            <div class="mt-1 text-sm text-slate-500">classes représentées</div>
+        </div>
+    </section>
+
+    <section class="mt-14 grid gap-6 sm:grid-cols-3">
+        <div>
+            <h3 class="font-semibold text-slate-900">1. Tu t'inscris</h3>
+            <p class="mt-1 text-sm text-slate-600">Quelques infos : ta classe et si tu cherches à parrainer ou à être parrainé·e.</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-slate-900">2. On fait les binômes</h3>
+            <p class="mt-1 text-sm text-slate-600">L'équipe associe les profils en fonction des filières et des motivations.</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-slate-900">3. Vous échangez</h3>
+            <p class="mt-1 text-sm text-slate-600">Vous prenez contact via Discord ou Instagram et l'aventure commence.</p>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,45 @@
+# Stack de développement — Système de parrainage BUT
+# Démarrage : docker compose up --build
+#   App    → http://localhost:8080
+#   MySQL  → 127.0.0.1:3307  (user: parrainage / mdp: parrainage / base: parrainage_db)
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: parrainage_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: parrainage_db
+      MYSQL_USER: parrainage
+      MYSQL_PASSWORD: parrainage
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - database_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "parrainage", "-pparrainage"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: parrainage_app
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: "mysql://parrainage:parrainage@database:3306/parrainage_db?serverVersion=8.0.37&charset=utf8mb4"
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor
+      - /var/www/html/var
+
+volumes:
+  database_data:

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci — Parrainage BUT{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-xl text-center">
+        <div class="text-5xl">✅</div>
+        <h1 class="mt-4 text-2xl font-bold text-slate-900">Inscription enregistrée</h1>
+        <p class="mt-2 text-slate-600">
+            Merci ! Ta demande a bien été prise en compte. L'équipe te recontactera dès qu'un binôme sera trouvé.
+        </p>
+        <a href="{{ path('home') }}" class="mt-6 inline-block text-sm font-semibold text-indigo-600 hover:text-indigo-500">
+            ← Retour à l'accueil
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Parrainage BUT Informatique{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}
+            {{ importmap('app') }}
+        {% endblock %}
+    </head>
+    <body class="flex min-h-full flex-col bg-slate-50 text-slate-800 antialiased">
+        <header class="border-b border-slate-200 bg-white">
+            <nav class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+                <a href="{{ path('home') }}" class="flex items-center gap-2 font-semibold text-slate-900">
+                    <span class="text-xl">🎓</span> Parrainage BUT
+                </a>
+                <div class="flex items-center gap-4 text-sm">
+                    <a href="{{ path('inscription') }}" class="text-slate-600 hover:text-slate-900">S'inscrire</a>
+                    {% if app.user %}
+                        <a href="{{ path('admin_dashboard') }}" class="text-slate-600 hover:text-slate-900">Admin</a>
+                        <a href="{{ path('admin_logout') }}" class="rounded-md bg-slate-100 px-3 py-1.5 font-medium text-slate-700 hover:bg-slate-200">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('admin_login') }}" class="text-slate-600 hover:text-slate-900">Admin</a>
+                    {% endif %}
+                </div>
+            </nav>
+        </header>
+
+        <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+            {% for label, messages in app.flashes(['success', 'error']) %}
+                {% for message in messages %}
+                    <div class="mb-6 rounded-lg border px-4 py-3 text-sm
+                        {{ label == 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-red-200 bg-red-50 text-red-800' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% block body %}{% endblock %}
+        </main>
+
+        <footer class="border-t border-slate-200 bg-white">
+            <div class="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-slate-400">
+                Parrainage BUT Informatique — {{ "now"|date("Y") }}
+            </div>
+        </footer>
+    </body>
+</html>
