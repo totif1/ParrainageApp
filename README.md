@@ -1,5 +1,8 @@
 # 🎓 Système de parrainage BUT Informatique
 
+[![CI](https://github.com/totif1/ParrainageApp/actions/workflows/ci.yml/badge.svg)](https://github.com/totif1/ParrainageApp/actions/workflows/ci.yml)
+[![Docker image](https://github.com/totif1/ParrainageApp/actions/workflows/docker.yml/badge.svg)](https://github.com/totif1/ParrainageApp/actions/workflows/docker.yml)
+
 Application web de mise en relation parrains / filleuls entre étudiant·es
 (BUT Informatique & GEA, BTS AC). Application **Symfony 7.4** unique, rendue
 côté serveur avec **Twig** et **Tailwind CSS**.
@@ -70,6 +73,37 @@ Pour lancer la console ou les migrations **depuis l'hôte** (hors Docker),
 copier `.env` vers `.env.local` et y pointer `DATABASE_URL` sur
 `127.0.0.1:3307`.
 
+### Qualité (mêmes commandes qu'en CI)
+
+```bash
+# Analyse statique
+docker compose exec app vendor/bin/phpstan analyse
+
+# Tests : base dédiée "parrainage_test" + PHPUnit
+docker compose exec database mysql -uroot -proot \
+  -e "CREATE DATABASE IF NOT EXISTS parrainage_test; GRANT ALL ON parrainage_test.* TO 'parrainage'@'%';"
+docker compose exec -e APP_ENV=test app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec -e APP_ENV=test app php bin/phpunit
+```
+
+## CI / CD
+
+Deux workflows GitHub Actions dans [`.github/workflows/`](.github/workflows/) :
+
+| Fichier | Déclencheur | Ce qu'il fait |
+|---|---|---|
+| `ci.yml` | chaque push + PR vers `main` | **lint** (`composer validate`, lints YAML / Twig / conteneur) · **analyse statique** PHPStan · **tests** : build Tailwind, migrations et PHPUnit sur un service MySQL 8 jetable |
+| `docker.yml` | push sur `main` et tags `v*` | build de l'image `--target prod` et publication sur `ghcr.io/<owner>/<repo>` (tags `latest`, `main`, `sha-…`, `X.Y.Z`) |
+
+Récupérer l'image publiée :
+
+```bash
+docker pull ghcr.io/totif1/parrainageapp:latest
+```
+
+Un déploiement automatique (SSH vers un serveur, PaaS…) serait un job
+supplémentaire dans `docker.yml`, après la publication de l'image.
+
 ## Structure
 
 ```
@@ -80,19 +114,31 @@ src/
   Form/              InscriptionType
   Repository/        InscriptionRepository (filtres, stats), AdminRepository
 templates/           base, home, inscription, admin
+tests/Functional/    pages publiques, inscription, espace admin
 migrations/          schéma initial + données de démo
-docker/              entrypoint du conteneur applicatif
+docker/              entrypoints des conteneurs (dev / prod)
 compose.yaml         stack de développement (app + MySQL)
-Dockerfile           image applicative
+Dockerfile           multi-stage : cible `dev` (compose) et `prod` (image publiée)
+phpstan.dist.neon    configuration de l'analyse statique
+.github/workflows/   pipelines CI et image Docker
 ```
 
 ## Production
 
-`compose.yaml` cible le développement. Pour la production, prévoir :
+L'image `--target prod` du `Dockerfile` est autoportante : elle contient le
+code, les dépendances `--no-dev`, l'autoload optimisé, le cache chauffé et le
+CSS compilé. Son entrypoint attend la base puis applique les migrations avant
+de lancer Apache.
 
-- `APP_ENV=prod`, `APP_SECRET` et identifiants MySQL fournis par des
-  variables d'environnement réelles (jamais committées) ;
-- `composer install --no-dev --optimize-autoloader` + `cache:warmup` dans
-  l'image ;
-- `php bin/console tailwind:build --minify` au build ;
+À fournir au runtime (jamais dans l'image) :
+
+- `APP_ENV=prod`, un vrai `APP_SECRET` ;
+- `DATABASE_URL` vers la base de production ;
 - un reverse proxy HTTPS devant le conteneur.
+
+```bash
+docker run -d -p 80:80 \
+  -e APP_SECRET=... \
+  -e DATABASE_URL="mysql://user:pass@db-host:3306/parrainage?serverVersion=8.0.37&charset=utf8mb4" \
+  ghcr.io/totif1/parrainageapp:latest
+```

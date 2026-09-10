@@ -3,11 +3,11 @@ set -e
 
 cd /var/www/html
 
-# 1. Dépendances PHP (le code est monté en volume en dev)
-if [ ! -f vendor/autoload_runtime.php ]; then
-    echo "→ composer install"
-    composer install --no-interaction --prefer-dist --no-progress
-fi
+# 1. Dépendances PHP (le code est monté en volume en dev).
+#    On lance toujours "install" : c'est quasi instantané si tout est à jour,
+#    et ça évite d'oublier une dépendance ajoutée depuis l'hôte.
+echo "→ composer install"
+composer install --no-interaction --prefer-dist --no-progress
 
 # 2. Attendre que MySQL accepte les connexions
 if [ -n "$DATABASE_URL" ]; then

@@ -1,4 +1,4 @@
-# Enable stateless CSRF protection for forms and logins/logouts
+# Protection CSRF « stateless » pour les formulaires et le login/logout.
 framework:
     form:
         csrf_protection:
@@ -9,3 +9,12 @@ framework:
             - submit
             - authenticate
             - logout
+
+# En test, le jeton stateless dépend d'un cookie posé par du JavaScript :
+# on désactive la protection CSRF des formulaires pour pouvoir les soumettre
+# depuis les tests fonctionnels.
+when@test:
+    framework:
+        form:
+            csrf_protection:
+                enabled: false

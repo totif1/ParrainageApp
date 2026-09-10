@@ -1,0 +1,34 @@
+#!/bin/sh
+# Entrypoint de l'image de production :
+#   attend la base, applique les migrations, puis lance Apache.
+set -e
+
+cd /var/www/html
+
+if [ -n "$DATABASE_URL" ]; then
+    echo "→ attente de la base de données"
+    tries=0
+    until php -r '
+        $p = parse_url(getenv("DATABASE_URL"));
+        try {
+            new PDO(
+                sprintf("mysql:host=%s;port=%d", $p["host"], $p["port"] ?? 3306),
+                $p["user"] ?? "root",
+                $p["pass"] ?? ""
+            );
+            exit(0);
+        } catch (Throwable $e) { exit(1); }
+    ' 2>/dev/null; do
+        tries=$((tries + 1))
+        if [ "$tries" -ge 30 ]; then
+            echo "  ✗ base de données injoignable après 60 s" >&2
+            exit 1
+        fi
+        sleep 2
+    done
+fi
+
+echo "→ migrations"
+php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
+exec "$@"

@@ -14,6 +14,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * @extends AbstractType<Inscription>
+ */
 class InscriptionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -21,14 +24,17 @@ class InscriptionType extends AbstractType
         $builder
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
+                'empty_data' => '',
                 'attr' => ['placeholder' => 'Léa'],
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
+                'empty_data' => '',
                 'attr' => ['placeholder' => 'Ton nom'],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
+                'empty_data' => '',
                 'attr' => ['placeholder' => 'prenom.nom@etu.umontpellier.fr'],
             ])
             ->add('classe', EnumType::class, [

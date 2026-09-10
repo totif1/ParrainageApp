@@ -1,0 +1,119 @@
+# -----------------------------------------------------------------------------
+#  Intégration continue
+#  Se déclenche à chaque push et sur chaque pull request vers main.
+#  3 jobs indépendants (ils tournent en parallèle) :
+#    1. lint            — validations rapides, sans base de données
+#    2. static-analysis — PHPStan
+#    3. tests           — migrations + PHPUnit sur une vraie base MySQL
+# -----------------------------------------------------------------------------
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+# Un seul run à la fois par branche : un nouveau push annule le précédent.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PHP_VERSION: '8.4'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, pdo_mysql, zip
+          coverage: none
+
+      # Installe les dépendances Composer et les met en cache automatiquement.
+      - name: Installer les dépendances
+        uses: ramsey/composer-install@v3
+
+      - run: composer validate --strict
+      - run: php bin/console lint:yaml config --parse-tags
+      - run: php bin/console lint:twig templates
+      - run: php bin/console lint:container
+
+  static-analysis:
+    name: Analyse statique (PHPStan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, pdo_mysql, zip
+          coverage: none
+
+      - name: Installer les dépendances
+        uses: ramsey/composer-install@v3
+
+      # L'extension Symfony de PHPStan lit le conteneur compilé.
+      - run: php bin/console cache:warmup
+      - run: vendor/bin/phpstan analyse --no-progress
+
+  tests:
+    name: Tests (PHPUnit + MySQL)
+    runs-on: ubuntu-latest
+
+    # Base de données jetable, montée le temps du job.
+    services:
+      database:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: parrainage_test
+          MYSQL_USER: parrainage
+          MYSQL_PASSWORD: parrainage
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      APP_ENV: test
+      # Surcharge le DATABASE_URL de .env.test : ici la base est le service ci-dessus.
+      DATABASE_URL: "mysql://parrainage:parrainage@127.0.0.1:3306/parrainage_test?serverVersion=8.0.37&charset=utf8mb4"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: intl, pdo_mysql, zip
+          coverage: none
+
+      - name: Installer les dépendances
+        uses: ramsey/composer-install@v3
+
+      - name: Compiler le CSS (Tailwind)
+        run: php bin/console tailwind:build --minify
+
+      - name: Appliquer les migrations
+        run: php bin/console doctrine:migrations:migrate --no-interaction
+
+      - name: Vérifier que le schéma correspond aux entités
+        run: php bin/console doctrine:schema:validate
+
+      - name: PHPUnit
+        run: php bin/phpunit

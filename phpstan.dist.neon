@@ -1,0 +1,14 @@
+# Analyse statique du code — https://phpstan.org
+# Lancer :  vendor/bin/phpstan analyse
+parameters:
+    level: 6
+    paths:
+        - src
+    # Le conteneur compilé permet à l'extension Symfony de connaître les services.
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    doctrine:
+        # Motif Symfony courant : la propriété est `?Enum` (nulle tant que le
+        # formulaire n'a pas été soumis), la colonne reste NOT NULL, et la
+        # contrainte de validation `NotNull` garantit le remplissage.
+        allowNullablePropertyForRequiredField: true

@@ -24,8 +24,9 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # La base de test est celle définie dans .env.test (parrainage_test).
+            # Pas de suffixe automatique : on n'utilise pas ParaTest.
+            dbname_suffix: ''
 
 when@prod:
     doctrine:

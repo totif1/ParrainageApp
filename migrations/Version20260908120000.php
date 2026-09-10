@@ -37,7 +37,7 @@ final class Version20260908120000 extends AbstractMigration
                 discord VARCHAR(255) DEFAULT NULL,
                 insta VARCHAR(255) DEFAULT NULL,
                 preference VARCHAR(255) DEFAULT NULL,
-                date_inscription DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+                date_inscription DATETIME NOT NULL,
                 UNIQUE INDEX uniq_inscription_email (email),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -48,8 +48,23 @@ final class Version20260908120000 extends AbstractMigration
                 id INT AUTO_INCREMENT NOT NULL,
                 username VARCHAR(50) NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
-                created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+                created_at DATETIME NOT NULL,
                 UNIQUE INDEX uniq_admin_username (username),
+                PRIMARY KEY(id)
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+        SQL);
+
+        // Table utilisée par Symfony Messenger (transport "failed" en base).
+        $this->addSql(<<<'SQL'
+            CREATE TABLE messenger_messages (
+                id BIGINT AUTO_INCREMENT NOT NULL,
+                body LONGTEXT NOT NULL,
+                headers LONGTEXT NOT NULL,
+                queue_name VARCHAR(190) NOT NULL,
+                created_at DATETIME NOT NULL,
+                available_at DATETIME NOT NULL,
+                delivered_at DATETIME DEFAULT NULL,
+                INDEX IDX_75EA56E0FB7336F0E3BD61CE16BA31DBBF396750 (queue_name, available_at, delivered_at, id),
                 PRIMARY KEY(id)
             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
@@ -72,5 +87,6 @@ final class Version20260908120000 extends AbstractMigration
     {
         $this->addSql('DROP TABLE inscriptions');
         $this->addSql('DROP TABLE admins');
+        $this->addSql('DROP TABLE messenger_messages');
     }
 }
