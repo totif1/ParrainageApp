@@ -78,6 +78,7 @@ COPY . .
 #    APP_SECRET / DATABASE_URL ne servent qu'à faire passer le warmup : les
 #    vraies valeurs sont injectées au runtime (docker run -e / compose).
 RUN APP_SECRET=build DATABASE_URL="mysql://u:p@127.0.0.1:3306/app?serverVersion=8.0.37" \
+    COMPOSER_ALLOW_SUPERUSER=1 \
     sh -c 'composer dump-autoload --no-dev --optimize --classmap-authoritative \
         && composer run-script post-install-cmd --no-interaction \
         && php bin/console tailwind:build --minify \
