@@ -8,43 +8,25 @@
         <div class="pointer-events-none absolute right-32 top-40 hidden h-52 w-52 rounded-full bg-lime mix-blend-multiply lg:block"></div>
 
         <div class="relative max-w-2xl">
-            <span class="sticker -rotate-[3deg]">RENTRÉE 2026 — C'EST OUVERT</span>
+            <span class="sticker -rotate-[3deg]">RENTRÉE 2026 : C'EST OUVERT !</span>
             <h1 class="mt-6 font-display text-[2.75rem] font-extrabold leading-[1.1] tracking-tight sm:text-6xl">
                 Trouve ton
                 <span class="inline-block -rotate-[2deg] rounded-full bg-navy px-3 py-0.5 text-cream">parrain</span>
-                ou ta marraine
+                ou ta <span class="inline-block -rotate-[2deg] rounded-full bg-navy px-3 py-0.5 text-cream">marraine</span>
             </h1>
             <p class="mt-6 max-w-[44ch] text-lg leading-relaxed text-muted2">
-                Un binôme avec un·e étudiant·e de ta formation. L'asso s'occupe de l'appairage —
-                toi, tu racontes juste qui tu es.
+                Un binôme avec un·e étudiant·e de ta formation. L'asso s'occupe de l'appairage,
+                toi? Tu racontes juste qui tu es.
             </p>
             <div class="mt-8 flex flex-wrap items-center gap-5">
                 <a href="{{ path('inscription') }}" class="btn-primary">Je m'inscris →</a>
-                <span class="border-b-2 border-lime pb-0.5 font-medium">Comment ça marche ?</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="mt-10 rounded-t-[60px] rounded-b-[32px] bg-navy px-6 py-14 text-cream">
-        <div class="flex flex-wrap items-center justify-center gap-6 sm:justify-around">
-            <div class="flex h-52 w-52 -rotate-[4deg] flex-col items-center justify-center rounded-full bg-cream text-center text-navy">
-                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.total }}</span>
-                <span class="mt-1 text-sm">inscriptions</span>
-            </div>
-            <div class="flex h-52 w-52 rotate-[3deg] flex-col items-center justify-center rounded-full bg-lime text-center text-navy">
-                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.recent }}</span>
-                <span class="mt-1 text-sm">dans les<br>dernières 24 h</span>
-            </div>
-            <div class="flex h-52 w-52 -rotate-[2deg] flex-col items-center justify-center rounded-full bg-cyan text-center text-navy">
-                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.byClass|length }}</span>
-                <span class="mt-1 text-sm">classes<br>représentées</span>
             </div>
         </div>
     </section>
 
     <section class="mt-16">
-        <h2 class="font-display text-4xl font-extrabold tracking-tight">Comment ça marche</h2>
-        <div class="mt-8 flex flex-col gap-5">
+        <h2 class="font-display text-4xl font-extrabold tracking-tight">Comment ça marche ?</h2>
+        <div class="mt-8 flex flex-col gap-5 items-center">
             <div class="flex max-w-3xl items-center gap-7 rounded-[999px_40px_999px_40px] border border-line bg-white px-8 py-7 sm:px-11">
                 <span class="font-display text-5xl font-extrabold leading-none text-lime">01</span>
                 <div>
@@ -68,4 +50,26 @@
             </div>
         </div>
     </section>
+
+    <br>
+    <div>
+        <h2 class="font-display text-4xl font-extrabold tracking-tight">Nos déjà inscrits :</h2>
+    </div>
+    <section class="mt-10 rounded-t-[60px] rounded-b-[32px] bg-navy px-6 py-14 text-cream">
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:justify-around">
+            <div class="flex h-52 w-52 -rotate-[4deg] flex-col items-center justify-center rounded-full bg-cream text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.total }}</span>
+                <span class="mt-1 text-sm">inscriptions</span>
+            </div>
+            <div class="flex h-52 w-52 rotate-[3deg] flex-col items-center justify-center rounded-full bg-lime text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.recent }}</span>
+                <span class="mt-1 text-sm">dans les<br>dernières 24 h</span>
+            </div>
+            <div class="flex h-52 w-52 -rotate-[2deg] flex-col items-center justify-center rounded-full bg-cyan text-center text-navy">
+                <span class="font-display text-6xl font-extrabold leading-none">{{ stats.byClass|length }}</span>
+                <span class="mt-1 text-sm">classes<br>représentées</span>
+            </div>
+        </div>
+    </section>
+
 {% endblock %}
