@@ -16,6 +16,9 @@ côté serveur avec **Twig** et **Tailwind CSS**.
 - **Espace admin** (`/admin`) : connexion par identifiant / mot de passe,
   tableau de bord avec liste filtrable (par classe, par email), statistiques
   par classe, suppression d'une inscription, export CSV.
+- **Gestion des comptes admin** (`/admin/comptes/nouveau`, accessible depuis
+  le bouton « Nouveau compte » du tableau de bord) : un admin déjà connecté
+  peut créer un accès pour une autre personne du bureau.
 
 ## Stack
 
@@ -80,10 +83,13 @@ copier `.env` vers `.env.local` et y pointer `DATABASE_URL` sur
 docker compose exec app vendor/bin/phpstan analyse
 
 # Tests : base dédiée "parrainage_test" + PHPUnit
+# (pas de .env.test committé : on passe DATABASE_URL explicitement)
 docker compose exec database mysql -uroot -proot \
   -e "CREATE DATABASE IF NOT EXISTS parrainage_test; GRANT ALL ON parrainage_test.* TO 'parrainage'@'%';"
-docker compose exec -e APP_ENV=test app php bin/console doctrine:migrations:migrate --no-interaction
-docker compose exec -e APP_ENV=test app php bin/phpunit
+
+TESTDB="mysql://parrainage:parrainage@database:3306/parrainage_test?serverVersion=8.0.37&charset=utf8mb4"
+docker compose exec -e APP_ENV=test -e DATABASE_URL="$TESTDB" app php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec -e APP_ENV=test -e DATABASE_URL="$TESTDB" app php bin/phpunit
 ```
 
 ## CI / CD

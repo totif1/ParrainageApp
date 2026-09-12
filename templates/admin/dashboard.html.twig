@@ -4,16 +4,14 @@
 {% block title %}Tableau de bord — Parrainage BUT{% endblock %}
 
 {% block header %}
-    <header class="bg-navy text-cream">
-        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 pb-9 pt-7">
-            <h1 class="font-display text-3xl font-extrabold tracking-tight">Tableau de bord</h1>
-            <div class="flex items-center gap-3 text-[15px]">
-                <a href="{{ path('admin_export') }}"
-                   class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Export CSV</a>
-                <a href="{{ path('admin_logout') }}" class="btn-accent">Déconnexion</a>
-            </div>
-        </div>
-    </header>
+    {% embed 'admin/_header.html.twig' with {title: 'Tableau de bord'} %}
+        {% block actions %}
+            <a href="{{ path('admin_account_new') }}"
+               class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Nouveau compte</a>
+            <a href="{{ path('admin_export') }}"
+               class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Export CSV</a>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}
 
 {% block body %}

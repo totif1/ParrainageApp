@@ -1,0 +1,17 @@
+{# En-tête sombre partagé par les pages admin authentifiées.
+   Variables : title (str), back_to (route path, optionnel).
+   Bloc "actions" : boutons additionnels avant "Déconnexion". #}
+<header class="bg-navy text-cream">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 pb-9 pt-7">
+        <div class="flex items-center gap-3">
+            {% if back_to is defined and back_to %}
+                <a href="{{ back_to }}" class="rounded-full p-2 text-cream/70 transition hover:bg-navysoft hover:text-cream" title="Retour" aria-label="Retour">←</a>
+            {% endif %}
+            <h1 class="font-display text-3xl font-extrabold tracking-tight">{{ title }}</h1>
+        </div>
+        <div class="flex items-center gap-3 text-[15px]">
+            {% block actions %}{% endblock %}
+            <a href="{{ path('admin_logout') }}" class="btn-accent">Déconnexion</a>
+        </div>
+    </div>
+</header>
