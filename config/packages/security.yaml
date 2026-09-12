@@ -25,7 +25,9 @@ security:
                 target: home
 
     access_control:
+        # Première règle qui correspond = celle qui s'applique : l'ordre compte.
         - { path: ^/admin/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin/comptes/nouveau, roles: ROLE_SUPER_ADMIN }
         - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:

@@ -2,7 +2,9 @@
 
 namespace App\Tests\Functional;
 
+use App\Entity\Admin;
 use App\Repository\AdminRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -14,6 +16,23 @@ class AdminAccountTest extends WebTestCase
         $client->request('GET', '/admin/comptes/nouveau');
 
         self::assertResponseRedirects('/admin/login');
+    }
+
+    public function testRegularAdminCannotCreateAccounts(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+
+        $hasher = $container->get(UserPasswordHasherInterface::class);
+        $member = (new Admin())->setUsername('membre.simple');
+        $member->setPasswordHash($hasher->hashPassword($member, 'peu-importe123'));
+        $container->get(EntityManagerInterface::class)->persist($member);
+        $container->get(EntityManagerInterface::class)->flush();
+
+        $client->loginUser($member);
+        $client->request('GET', '/admin/comptes/nouveau');
+
+        self::assertResponseStatusCodeSame(403);
     }
 
     public function testFormIsReachableWhenLoggedIn(): void

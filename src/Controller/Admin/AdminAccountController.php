@@ -11,13 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Gestion des comptes administrateur.
- * Couvert par l'access_control "^/admin -> ROLE_ADMIN" (security.yaml) :
- * seul un admin déjà connecté peut créer un nouveau compte.
+ * Création de comptes administrateur — réservée au(x) super-admin(s).
+ * Double verrou : access_control (security.yaml) ET l'attribut ci-dessous,
+ * pour que la page reste protégée même si la config d'access_control
+ * venait à changer.
  */
 #[Route('/admin/comptes')]
+#[IsGranted('ROLE_SUPER_ADMIN')]
 class AdminAccountController extends AbstractController
 {
     #[Route('/nouveau', name: 'admin_account_new', methods: ['GET', 'POST'])]

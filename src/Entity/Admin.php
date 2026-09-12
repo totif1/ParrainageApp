@@ -28,6 +28,17 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'password_hash', length: 255)]
     private string $passwordHash = '';
 
+    /**
+     * Rôles complémentaires à ROLE_ADMIN (qui est toujours accordé).
+     * Seul ROLE_SUPER_ADMIN existe pour l'instant : il donne accès à la
+     * création de nouveaux comptes admin. Les comptes créés depuis
+     * l'interface n'en héritent jamais automatiquement.
+     *
+     * @var list<string>
+     */
+    #[ORM\Column]
+    private array $roles = [];
+
     #[ORM\Column(name: 'created_at')]
     private \DateTimeImmutable $createdAt;
 
@@ -85,7 +96,25 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        return ['ROLE_ADMIN'];
+        $roles = $this->roles;
+        $roles[] = 'ROLE_ADMIN';
+
+        return array_values(array_unique($roles));
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return \in_array('ROLE_SUPER_ADMIN', $this->roles, true);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**

@@ -6,8 +6,12 @@
 {% block header %}
     {% embed 'admin/_header.html.twig' with {title: 'Tableau de bord'} %}
         {% block actions %}
-            <a href="{{ path('admin_account_new') }}"
-               class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Nouveau compte</a>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <a href="{{ path('admin_account_new') }}"
+                   class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Nouveau compte</a>
+            {% endif %}
+            <a href="{{ path('admin_my_account') }}"
+               class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Mon compte</a>
             <a href="{{ path('admin_export') }}"
                class="rounded-full border-[1.5px] border-[#40566a] px-5 py-2.5 text-cream transition hover:bg-navysoft">Export CSV</a>
         {% endblock %}

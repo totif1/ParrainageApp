@@ -16,9 +16,14 @@ côté serveur avec **Twig** et **Tailwind CSS**.
 - **Espace admin** (`/admin`) : connexion par identifiant / mot de passe,
   tableau de bord avec liste filtrable (par classe, par email), statistiques
   par classe, suppression d'une inscription, export CSV.
-- **Gestion des comptes admin** (`/admin/comptes/nouveau`, accessible depuis
-  le bouton « Nouveau compte » du tableau de bord) : un admin déjà connecté
-  peut créer un accès pour une autre personne du bureau.
+- **Gestion des comptes admin** — deux niveaux :
+  - **Super-admin** (`ROLE_SUPER_ADMIN`, réservé au compte de démo `admin`) :
+    seul rôle à voir le bouton « Nouveau compte » et à pouvoir créer un accès
+    pour une autre personne du bureau (`/admin/comptes/nouveau`, mot de passe
+    temporaire à transmettre à la main).
+  - **N'importe quel admin** (`/admin/mon-compte`, bouton « Mon compte ») :
+    consulte ses infos et remplace son mot de passe (temporaire ou non) par
+    le sien, après avoir saisi l'ancien.
 
 ## Stack
 
