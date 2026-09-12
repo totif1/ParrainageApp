@@ -82,6 +82,7 @@ RUN APP_SECRET=build DATABASE_URL="mysql://u:p@127.0.0.1:3306/app?serverVersion=
     sh -c 'composer dump-autoload --no-dev --optimize --classmap-authoritative \
         && composer run-script post-install-cmd --no-interaction \
         && php bin/console tailwind:build --minify \
+        && php bin/console asset-map:compile \
         && php bin/console cache:warmup \
         && chown -R www-data:www-data var'
 
