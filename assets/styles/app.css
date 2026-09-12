@@ -25,6 +25,11 @@
     body {
         @apply bg-cream font-sans text-navy antialiased;
     }
+
+    /* Fond de la modale native <dialog> (::backdrop n'est pas stylable via une classe Tailwind) */
+    dialog::backdrop {
+        background: rgba(18, 35, 46, 0.6);
+    }
 }
 
 /* Blob organique repris de la courbe du logo */

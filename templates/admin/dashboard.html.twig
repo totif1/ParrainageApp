@@ -70,32 +70,80 @@
         <div class="text-right">Action</div>
     </div>
 
-    {# --- Lignes en pastilles --- #}
+    {# --- Lignes en pastilles — cliquables, détail complet en pop-up --- #}
     <div class="mt-2.5 flex flex-col gap-2.5">
         {% for i in inscriptions %}
-            <div class="grid grid-cols-1 gap-2 rounded-[28px] border-[1.5px] border-line bg-white px-6 py-4 text-sm
-                        lg:grid-cols-[1.6fr_1.3fr_1fr_0.9fr_1fr_0.7fr_0.7fr] lg:items-center lg:gap-4 lg:rounded-full">
-                <div>
+            {%- set contacts = [i.discord, i.insta]|filter(v => v is not empty)|join(' · ') -%}
+            <div class="grid cursor-pointer grid-cols-1 gap-2 rounded-[28px] border-[1.5px] border-line bg-white px-6 py-4 text-sm transition hover:border-cyandark
+                        lg:grid-cols-[1.6fr_1.3fr_1fr_0.9fr_1fr_0.7fr_0.7fr] lg:items-center lg:gap-4 lg:rounded-full"
+                 data-controller="modal" data-action="click->modal#open keydown.enter->modal#open"
+                 role="button" tabindex="0">
+                <div class="min-w-0">
                     <div class="font-bold">{{ i.prenom }} {{ i.nom }}</div>
                     {% if i.motivation %}
-                        <div class="truncate text-[13px] text-muted" title="{{ i.motivation }}">{{ i.motivation }}</div>
+                        <div class="truncate text-[13px] text-muted">{{ i.motivation }}</div>
                     {% endif %}
                 </div>
-                <div class="truncate text-[13px] text-muted2">{{ i.email }}</div>
+                <div class="min-w-0 truncate text-[13px] text-muted2">{{ i.email }}</div>
                 <div>{{ classe_badge(i.classe) }}</div>
                 <div>{{ pref_badge(i.preference) }}</div>
-                <div class="text-[13px] text-muted2">
-                    {%- set contacts = [i.discord, i.insta]|filter(v => v is not empty)|join(' · ') -%}
-                    {{ contacts ?: '—' }}
-                </div>
+                <div class="min-w-0 truncate text-[13px] text-muted2">{{ contacts ?: '—' }}</div>
                 <div class="text-[13px] text-muted">{{ i.dateInscription|date('d/m') }}</div>
-                <div class="lg:text-right">
+                <div class="lg:text-right" data-action="click->modal#stop">
                     <form method="post" action="{{ path('admin_inscription_delete', {id: i.id}) }}"
                           onsubmit="return confirm('Supprimer l\'inscription de {{ i.prenom }} {{ i.nom }} ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_inscription_' ~ i.id) }}">
                         <button class="text-[13px] font-medium text-[#a51f16] hover:underline">Supprimer</button>
                     </form>
                 </div>
+
+                {# Détail complet — la ligne compacte ci-dessus ne montre qu'un aperçu tronqué. #}
+                <dialog data-modal-target="dialog" data-action="click->modal#stop click->modal#closeOnBackdrop"
+                        class="m-auto w-full max-w-lg rounded-[40px] border border-line bg-white p-0 text-navy">
+                    <div class="p-8 sm:p-10">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="font-display text-2xl font-extrabold tracking-tight">{{ i.prenom }} {{ i.nom }}</h3>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    {{ classe_badge(i.classe) }}
+                                    {{ pref_badge(i.preference) }}
+                                </div>
+                            </div>
+                            <button type="button" data-action="modal#close" aria-label="Fermer"
+                                    class="rounded-full p-2 text-muted transition hover:bg-cream hover:text-navy">✕</button>
+                        </div>
+
+                        <dl class="mt-6 flex flex-col gap-4 text-sm">
+                            <div>
+                                <dt class="lbl">Email</dt>
+                                <dd class="mt-1"><a href="mailto:{{ i.email }}" class="text-cyandark hover:underline">{{ i.email }}</a></dd>
+                            </div>
+                            <div>
+                                <dt class="lbl">Contacts</dt>
+                                <dd class="mt-1 text-muted2">{{ contacts ?: '—' }}</dd>
+                            </div>
+                            <div>
+                                <dt class="lbl">Inscrit·e le</dt>
+                                <dd class="mt-1 text-muted2">{{ i.dateInscription|date('d/m/Y à H:i') }}</dd>
+                            </div>
+                            {% if i.motivation %}
+                                <div>
+                                    <dt class="lbl">Motivation</dt>
+                                    <dd class="mt-1 whitespace-pre-line leading-relaxed text-muted2">{{ i.motivation }}</dd>
+                                </div>
+                            {% endif %}
+                        </dl>
+
+                        <div class="mt-8 flex items-center justify-between gap-3">
+                            <form method="post" action="{{ path('admin_inscription_delete', {id: i.id}) }}"
+                                  onsubmit="return confirm('Supprimer l\'inscription de {{ i.prenom }} {{ i.nom }} ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_inscription_' ~ i.id) }}">
+                                <button class="text-sm font-medium text-[#a51f16] hover:underline">Supprimer l'inscription</button>
+                            </form>
+                            <button type="button" data-action="modal#close" class="btn-ghost">Fermer</button>
+                        </div>
+                    </div>
+                </dialog>
             </div>
         {% else %}
             <div class="rounded-full border-2 border-dashed border-linestrong px-7 py-8 text-center">
