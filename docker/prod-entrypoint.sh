@@ -31,4 +31,12 @@ fi
 echo "→ migrations"
 php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
+echo "→ migrations"
+php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+
+# Fix Railway : force mpm_prefork (seul MPM compatible avec mod_php)
+a2dismod mpm_event mpm_worker 2>/dev/null || true
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.* 2>/dev/null || true
+a2enmod mpm_prefork 2>/dev/null || true
+
 exec "$@"
