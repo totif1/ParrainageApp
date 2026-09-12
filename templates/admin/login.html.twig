@@ -10,7 +10,9 @@
         <div class="relative w-full max-w-md overflow-hidden rounded-[40px] bg-navy p-10 sm:p-14">
             <div class="pointer-events-none absolute -right-20 -top-16 h-64 w-64 rounded-full bg-navysoft"></div>
 
-            <form method="post" class="relative rounded-[32px] bg-cream p-8">
+            {# data-turbo="false" : la connexion change la session, Turbo peut
+               rester bloqué sur la redirection qui suit — navigation classique. #}
+            <form method="post" data-turbo="false" class="relative rounded-[32px] bg-cream p-8">
                 <h1 class="font-display text-2xl font-extrabold tracking-tight">Espace admin</h1>
                 <p class="mt-1 text-sm text-muted">Réservé au bureau de l'asso.</p>
 

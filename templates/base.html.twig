@@ -26,7 +26,7 @@
                     <div class="flex items-center gap-4 text-[15px] sm:gap-5">
                         {% if app.user %}
                             <a href="{{ path('admin_dashboard') }}" class="text-muted hover:text-navy">Admin</a>
-                            <a href="{{ path('admin_logout') }}" class="btn-accent">Déconnexion</a>
+                            <a href="{{ path('admin_logout') }}" data-turbo="false" class="btn-accent">Déconnexion</a>
                         {% else %}
                             <a href="{{ path('admin_login') }}" class="text-muted hover:text-navy">Admin</a>
                             <a href="{{ path('inscription') }}" class="hidden rounded-full bg-navy px-5 py-2.5 font-medium text-cream sm:inline-block">Je m'inscris</a>

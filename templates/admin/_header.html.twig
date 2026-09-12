@@ -11,7 +11,7 @@
         </div>
         <div class="flex items-center gap-3 text-[15px]">
             {% block actions %}{% endblock %}
-            <a href="{{ path('admin_logout') }}" class="btn-accent">Déconnexion</a>
+            <a href="{{ path('admin_logout') }}" data-turbo="false" class="btn-accent">Déconnexion</a>
         </div>
     </div>
 </header>
