@@ -2,6 +2,17 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
+    # L'appli tourne derrière le reverse proxy de la plateforme (Railway…) :
+    # celui-ci termine le HTTPS et transmet à Apache en clair, avec les
+    # en-têtes X-Forwarded-*. Sans ça, Symfony croit être en HTTP -> URLs
+    # absolues fausses, cookies "Secure" jamais posés, et surtout la
+    # protection CSRF "stateless" (vérifie que schéma+hôte concordent)
+    # peut rejeter des connexions légitimes ("Invalid CSRF token").
+    # "REMOTE_ADDR" = on fait confiance à qui se connecte directement au
+    # conteneur : sur une PaaS, seul son propre routeur peut y arriver.
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port']
+
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
